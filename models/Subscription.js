@@ -2,21 +2,20 @@ module.exports = (dbinfo, Sequelize) => {
     return dbinfo.define(
         "subscription", {
             id: {
-                type:  Sequelize.DataTypes.INTEGER,
+                type: Sequelize.DataTypes.INTEGER,
                 primaryKey: true,
                 autoIncrement: true
             },
-            type: {
+            subscription_name: {
                 type: Sequelize.DataTypes.STRING(45),
-                allowNull: false
+                unique: true,
             },
-            prix: {
+            price: {
                 type: Sequelize.DataTypes.INTEGER,
-                allowNull: false
-            },
-        },{
+            }
+        }, {
             timestamps: true,
             underscored: true
         }
-    )
-}
+    );
+};

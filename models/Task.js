@@ -11,11 +11,11 @@ module.exports = (dbinfo, Sequelize) => {
                 allowNull: false
             },
             start: {
-                type: Sequelize.DataTypes.DATETIME,
+                type: Sequelize.DataTypes.DATE,
                 allowNull: false
             },
             end: {
-                type: Sequelize.DataTypes.DATETIME,
+                type: Sequelize.DataTypes.DATE,
                 allowNull: false
             },
             description: {
@@ -26,9 +26,9 @@ module.exports = (dbinfo, Sequelize) => {
                 type: Sequelize.DataTypes.STRING(255),
                 allowNull: true
             },
-        },{
+        }, {
             timestamps: true,
             underscored: true
         }
-    )
-}
+    );
+};

@@ -17,7 +17,7 @@ router.post("/register", (req,res) => {
                     email: req.body.email,
                     password: password
                 })
-                .then(clientitem => {
+                .then(useritem => {
                     let token = jwt.sign(useritem.dataValues,
                         process.env.SECRET_KEY, {
                             expiresIn: 1440
@@ -29,7 +29,7 @@ router.post("/register", (req,res) => {
                     res.send(err)
                 })
             } else {
-                res.json("client déjà dans la base")
+                res.json("user already exist")
             }
         })
         .catch( err => {
@@ -37,44 +37,19 @@ router.post("/register", (req,res) => {
         })
 });
 
-router.get("/profile/:id", (res, res) => {
+router.get("/profile/:id", (req, res) => {
     db.user.findOne({
             where: { id: req.params.id }
         })
-        .then(client => {
-            if (client) {
-                let token = jwt.sign(client.dataValues,
+        .then(user => {
+            if (user) {
+                let token = jwt.sign(user.dataValues,
                     process.env.SECRET_KEY, {
                         expiresIn: 1440
                     });
                 res.status(200).json({ token: token })
             } else {
                 res.json("error cet utilisateur n'existe pas")
-            }
-        })
-        .catch(err => {
-            res.json(err)
-        })
-});
-
-router.post("/login", (req, res) => {
-    db.user.findOne({
-            where: { email: req.body.email }
-        })
-        .then(client => {
-            if(client) {
-                if (bcrypt.compareSync(req.body.password, 
-                        user.password)) {
-                    let token = jwt.sign(client.dataValues,
-                        process.env.SECRET_KEY, {
-                            expiresIn: 1440
-                        });
-                    res.status(200).json({ roken: token })
-                } else {
-                    res.status(520).json("wrong email or password")
-                }
-            } else {
-                return res.status(520).json("user don't exist")
             }
         })
         .catch(err => {
@@ -96,7 +71,7 @@ router.put("/update/:id", (req, res) => {
                         where: { id: useritem.id }
                     })
                     .then(user => {
-                        let oken = jwt.sign(client.dataValues,
+                        let oken = jwt.sign(user.dataValues,
                             process.env.SECRET_KEY, {
                                 expiresIn: 1440
                             });
@@ -117,3 +92,54 @@ router.put("/update/:id", (req, res) => {
         res.json(err);
     })
 })
+
+router.delete("/delete/:id", (req, res) => {
+    db.user.findOne({
+        where: { id: req.params.id }
+    })
+    .then(user => {
+        if(user) {
+            user.destroy()
+            .then(() => {
+                res.json("user deleted")
+            }) 
+            .catch(err => {
+                res.json("error" + err)
+            })
+        } else {
+            res.json({
+                err: "can't delete the user"
+            })
+        }
+    })
+    .catch(err => {
+        res.json("error" + err)
+    })
+})
+
+router.post("/login", (req, res) => {
+    db.user.findOne({
+            where: { email: req.body.email }
+        })
+        .then(user => {
+            if(user) {
+                if (bcrypt.compareSync(req.body.password, 
+                        user.password)) {
+                    let token = jwt.sign(user.dataValues,
+                        process.env.SECRET_KEY, {
+                            expiresIn: 1440
+                        });
+                    res.status(200).json({ roken: token })
+                } else {
+                    res.status(520).json("wrong email or password")
+                }
+            } else {
+                return res.status(520).json("user don't exist")
+            }
+        })
+        .catch(err => {
+            res.json(err)
+        })
+});
+
+module.exports = router;

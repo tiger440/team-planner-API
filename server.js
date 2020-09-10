@@ -12,7 +12,9 @@ app.use(Cors());
 app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({extended: false}));
 
+app.use("/user",require('./router/user'));
+
 
 app.listen(port, function () {
-    console.log(`App listening on ${hostname}${port}`);
+    console.log(`App listening on ${hostname}:${port}`);
 });

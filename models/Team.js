@@ -10,9 +10,9 @@ module.exports = (dbinfo, Sequelize) => {
                 type: Sequelize.DataTypes.STRING(45),
                 allowNull: false
             },
-        },{
+        }, {
             timestamps: true,
             underscored: true
         }
-    )
-}
+    );
+};
