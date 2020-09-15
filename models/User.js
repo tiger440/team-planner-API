@@ -15,16 +15,21 @@ module.exports = (dbinfo, Sequelize) => {
                 allowNull: false
             },
             email: {
-                type: Sequelize.DataTypes.STRING(255),
-                allowNull: false
+                type: Sequelize.DataTypes.STRING(150),
+                allowNull: false,
+                unique: true,
             },
             password: {
-                type: Sequelize.DataTypes.STRING(45),
+                type: Sequelize.DataTypes.STRING,
+                allowNUll: false
             },
             image: {
                 type: Sequelize.DataTypes.STRING(255),
                 allowNull: true
             },
+            Status: {
+                type: Sequelize.DataTypes.BOOLEAN,
+            }
         }, {
             timestamps: true,
             underscored: true

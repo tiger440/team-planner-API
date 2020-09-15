@@ -4,37 +4,33 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const db = require("../database/db");
 
-router.post("/register", (req,res) => {
+process.env.SECRET_KEY = "secret";
+
+router.post("/register",(req,res) => {
     db.user.findOne({
-            where: {email: req.body.email}
-        })
-        .then(user => {
-            if(!user){
-                password = bcrypt.hashSync(req.body.password, 50);
-                db.user.create({
-                    nom: req.body.nom,
-                    prenom: req.body.prenom,
-                    email: req.body.email,
-                    password: password
+        where: {email: req.body.email}
+    })
+    .then(user => {
+        if(!user){
+            const hash = bcrypt.hashSync(req.body.password,10);
+            req.body.password = hash;
+            db.user.create(req.body)
+            .then(itemuser => {
+                res.status(200).json({
+                    message: "Vous devez valider votre email",
+                    email: itemuser.email
                 })
-                .then(useritem => {
-                    let token = jwt.sign(useritem.dataValues,
-                        process.env.SECRET_KEY, {
-                            expiresIn: 1440
-                        });
-                    
-                    res.status(200).json({ token: token })
-                })
-                .catch(err => {
-                    res.send(err)
-                })
-            } else {
-                res.json("user already exist")
-            }
-        })
-        .catch( err => {
-            res.json({ error: err })
-        })
+            })
+            .catch(err => {
+                res.json(err)
+            })
+        } else {
+            res.json("cette adresse mail est déjà utilisée")
+        }
+    })
+    .catch(err => {
+        res.json(err)
+    })
 });
 
 router.get("/profile/:id", (req, res) => {
@@ -91,7 +87,7 @@ router.put("/update/:id", (req, res) => {
     .catch(err => {
         res.json(err);
     })
-})
+});
 
 router.delete("/delete/:id", (req, res) => {
     db.user.findOne({
@@ -115,31 +111,36 @@ router.delete("/delete/:id", (req, res) => {
     .catch(err => {
         res.json("error" + err)
     })
-})
+});
 
-router.post("/login", (req, res) => {
+router.get("/login",(req,res) => {
     db.user.findOne({
-            where: { email: req.body.email }
-        })
-        .then(user => {
-            if(user) {
-                if (bcrypt.compareSync(req.body.password, 
-                        user.password)) {
-                    let token = jwt.sign(user.dataValues,
-                        process.env.SECRET_KEY, {
-                            expiresIn: 1440
-                        });
-                    res.status(200).json({ roken: token })
-                } else {
-                    res.status(520).json("wrong email or password")
-                }
+        where: { email: req.body.email }
+    })
+    .then(user => {
+        if(user.Status === true){
+            if(bcrypt.compareSync(req.body.password, user.password)){
+            let userdata = {
+                nom: user.nom,
+                prenom: user.prenom,
+                email: user.email,
+                image: user.image
+            };
+            let token = jwt.sign(userdata,process.env.SECRET_KEY,{
+                expiresIn: 1440,
+            })
+            res.status(200).json({token: token})
             } else {
-                return res.status(520).json("user don't exist")
+                res.json("error mail or password")
             }
-        })
-        .catch(err => {
-            res.json(err)
-        })
+        } else {
+            res.json({ message: "vous devez valider votre mail"})
+        } 
+    })
+    .catch(err => {
+        res.json(err)
+    })
+    
 });
 
 module.exports = router;

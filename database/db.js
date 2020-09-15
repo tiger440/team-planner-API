@@ -25,7 +25,7 @@ db.task = require("../models/Task")(dbinfo, Sequelize);
 db.team = require("../models/Team")(dbinfo, Sequelize);
 db.role = require("../models/Role")(dbinfo, Sequelize);
 db.subscription = require("../models/Subscription")(dbinfo, Sequelize);
-db.rattacher = require("../models/Rattacher")(dbinfo, Sequelize);
+db.addtasks = require("../models/Addtasks")(dbinfo, Sequelize);
 db.assigner = require("../models/Assigner")(dbinfo, Sequelize);
 db.souscrire = require("../models/Souscrire")(dbinfo, Sequelize);
 
@@ -33,7 +33,7 @@ db.souscrire = require("../models/Souscrire")(dbinfo, Sequelize);
 db.dbinfo = dbinfo;
 db.Sequelize = Sequelize;
 
-dbinfo.sync({force: true});
+//dbinfo.sync({force: true});
 
 //dbinfo.sync();
 

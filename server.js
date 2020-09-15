@@ -13,6 +13,7 @@ app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({extended: false}));
 
 app.use("/user",require('./router/user'));
+app.use("/", require("./router/nodemailer"));
 
 
 app.listen(port, function () {

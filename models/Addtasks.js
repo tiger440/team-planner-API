@@ -1,6 +1,6 @@
 module.exports = (dbinfo, Sequelize) => {
     return dbinfo.define(
-        "rattacher", {
+        "addtasks", {
             Status: {
                 type: Sequelize.DataTypes.BOOLEAN,
             } 
