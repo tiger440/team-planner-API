@@ -26,6 +26,7 @@ db.team = require("../models/Team")(dbinfo, Sequelize);
 db.role = require("../models/Role")(dbinfo, Sequelize);
 db.subscription = require("../models/Subscription")(dbinfo, Sequelize);
 db.linktask = require("../models/Linktask")(dbinfo, Sequelize);
+db.linkteam = require("../models/Linkteam")(dbinfo, Sequelize);
 db.assigner = require("../models/Assigner")(dbinfo, Sequelize);
 db.souscrire = require("../models/Souscrire")(dbinfo, Sequelize);
 

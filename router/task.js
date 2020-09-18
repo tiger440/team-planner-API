@@ -1,19 +1,32 @@
 const express = require('Express');
 const db = require('../database/db');
 const router = express.Router();
+const Sequelize = require('sequelize')
+const Op = Sequelize.Op
+const Moment = require('moment')
 
-
+//CHECK
 router.post("/create", (req, res) => {
     db.task.findOne({ 
         where: {
-            nom: req.body.nom,
-            start: req.body.start,
-            end: req.body.end
+            task_name: {
+                [Op.like]: req.body.task_name
+            },
+            start: {
+                [Op.like]: req.body.start
+            },
+            end: {
+                [Op.like]: req.body.end
+            }
         }
     })
     .then(task => {
     if (!task){
-        if(req.body.start.getTime() < req.body.end.getTime()) {
+        const debut = Date.parse(req.body.start);
+        const fin = Date.parse(req.body.end);
+        console.log(debut)
+        console.log(fin)
+        if(fin - debut > 0) {
             db.task.create(req.body)
         } else {
             res.json("date incohérente")
@@ -26,18 +39,25 @@ router.post("/create", (req, res) => {
         res.json("error" + err)
     })
 });
-
-router.post("/updateTask", (req, res) => {
+//CHECK
+router.post("/updateTask/:id", (req, res) => {
     db.task.findOne({
         where: { id: req.params.id }
     })
     .then(task => {
-        task.update()
+        if(task) {
+            db.task.update(req.body, { where: {id: task.id} })
+        } else {
+            res.json("can't update the task")
+        }
     })
-})
-
+    .catch(err => {
+        res.json('error' + err)
+    });
+});
+//CHECK
 router.delete("/deleteTask/:id", (req, res) => {
-    db.addtask.findOne({
+    db.task.findOne({
         where: { id: req.params.id }
     })
     .then(task => {
@@ -60,20 +80,10 @@ router.delete("/deleteTask/:id", (req, res) => {
     })
 });
 
-router.get("/findUserTasks", (req, res) => {
-    db.addtask.findAll({
-        include: [
-            {model: db.user}
-        ]
-    })
-    .then(task => {
-        res.json(task)
-    })
-});
-
 router.post("/addTaskUser", (req, res) => {
-    db.user.findOne({
-        where: {email: req.body.email}
+    for(let i = 0; i < req.length; i++) {
+      db.user.findOne({
+        where: {email: req.body.email[i]}
     })
         .then(user => {
             if(user){
@@ -88,7 +98,19 @@ router.post("/addTaskUser", (req, res) => {
         })
         .catch(err => {
             res.send('error' + err)
-        })
+        })  
+    }
+});
+
+router.get("/findUserTasks", (req, res) => {
+    db.addtask.findAll({
+        include: [
+            {model: db.user}
+        ]
+    })
+    .then(task => {
+        res.json(task)
+    })
 });
 
 router.post("/removeTaskUser", (req, res) => {

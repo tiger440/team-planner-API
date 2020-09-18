@@ -1,9 +1,9 @@
 module.exports = (dbinfo, Sequelize) => {
     return dbinfo.define(
-        "attribuer", {
-            Status: {
+        "linkteam", {
+            chef: {
                 type: Sequelize.DataTypes.BOOLEAN,
-            } 
+            }
         },{
             timestamps: true,
             underscored: true
