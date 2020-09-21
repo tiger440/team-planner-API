@@ -81,9 +81,8 @@ router.delete("/deleteTask/:id", (req, res) => {
 });
 
 router.post("/addTaskUser", (req, res) => {
-    for(let i = 0; i < req.length; i++) {
       db.user.findOne({
-        where: {email: req.body.email[i]}
+        where: {email: req.body.email}
     })
         .then(user => {
             if(user){
@@ -99,7 +98,6 @@ router.post("/addTaskUser", (req, res) => {
         .catch(err => {
             res.send('error' + err)
         })  
-    }
 });
 
 router.get("/findUserTasks", (req, res) => {
