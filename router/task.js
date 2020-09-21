@@ -1,9 +1,8 @@
 const express = require('Express');
 const db = require('../database/db');
 const router = express.Router();
-const Sequelize = require('sequelize')
-const Op = Sequelize.Op
-const Moment = require('moment')
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 //CHECK
 router.post("/create", (req, res) => {
@@ -24,10 +23,9 @@ router.post("/create", (req, res) => {
     if (!task){
         const debut = Date.parse(req.body.start);
         const fin = Date.parse(req.body.end);
-        console.log(debut)
-        console.log(fin)
         if(fin - debut > 0) {
             db.task.create(req.body)
+            res.json("task successfully created")
         } else {
             res.json("date incohérente")
         } 
@@ -39,6 +37,7 @@ router.post("/create", (req, res) => {
         res.json("error" + err)
     })
 });
+
 //CHECK
 router.post("/updateTask/:id", (req, res) => {
     db.task.findOne({
@@ -55,6 +54,7 @@ router.post("/updateTask/:id", (req, res) => {
         res.json('error' + err)
     });
 });
+
 //CHECK
 router.delete("/deleteTask/:id", (req, res) => {
     db.task.findOne({
@@ -80,8 +80,9 @@ router.delete("/deleteTask/:id", (req, res) => {
     })
 });
 
+//CHECK - AJOUTER FOR POUR QUE PLUSIEURS EMAIL SOIT PRIS EN COMPTE DANS UNE REQUEST
 router.post("/addTaskUser", (req, res) => {
-      db.user.findOne({
+       db.user.findOne({
         where: {email: req.body.email}
     })
         .then(user => {
@@ -97,20 +98,26 @@ router.post("/addTaskUser", (req, res) => {
         })
         .catch(err => {
             res.send('error' + err)
-        })  
+        }) 
 });
 
+//CHECK
 router.get("/findUserTasks", (req, res) => {
-    db.addtask.findAll({
+    db.user.findOne({
+        where: {id: req.body.id},
         include: [
-            {model: db.user}
+            {model: db.task}
         ]
     })
     .then(task => {
         res.json(task)
     })
+    .catch(err =>{
+        res.json("error" + err)
+    })
 });
 
+//CHECK
 router.post("/removeTaskUser", (req, res) => {
     db.user.findOne({
         where: {email: req.body.email}

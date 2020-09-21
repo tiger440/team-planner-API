@@ -6,6 +6,7 @@ const db = require("../database/db");
 
 process.env.SECRET_KEY = "secret";
 
+//CHECK
 router.post("/register",(req,res) => {
     db.user.findOne({
         where: {email: req.body.email}
@@ -33,6 +34,7 @@ router.post("/register",(req,res) => {
     })
 });
 
+//CHECK
 router.get("/profile/:id", (req, res) => {
     db.user.findOne({
             where: { id: req.params.id }
@@ -53,6 +55,7 @@ router.get("/profile/:id", (req, res) => {
         })
 });
 
+//CHECK
 router.put("/update/:id", (req, res) => {
     db.user.findOne({
         where: { id: req.params.id }
@@ -67,7 +70,7 @@ router.put("/update/:id", (req, res) => {
                         where: { id: useritem.id }
                     })
                     .then(user => {
-                        let oken = jwt.sign(user.dataValues,
+                        let token = jwt.sign(user.dataValues,
                             process.env.SECRET_KEY, {
                                 expiresIn: 1440
                             });
@@ -89,6 +92,7 @@ router.put("/update/:id", (req, res) => {
     })
 });
 
+//CHECK
 router.delete("/delete/:id", (req, res) => {
     db.user.findOne({
         where: { id: req.params.id }
@@ -113,6 +117,7 @@ router.delete("/delete/:id", (req, res) => {
     })
 });
 
+//CHECK
 router.get("/login",(req,res) => {
     db.user.findOne({
         where: { email: req.body.email }

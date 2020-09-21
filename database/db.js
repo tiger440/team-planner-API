@@ -33,6 +33,8 @@ db.souscrire = require("../models/Souscrire")(dbinfo, Sequelize);
 db.user.belongsToMany(db.task, { through: 'linktask', foreignKey: 'userId' });
 db.task.belongsToMany(db.user, { through: 'linktask', foreignKey: 'TaskId' });
 
+db.user.belongsToMany(db.team, { through: 'linkteam', foreignKey: 'userId' });
+db.team.belongsToMany(db.user, { through: 'linkteam', foreignKey: 'teamId' });
 
 db.dbinfo = dbinfo;
 db.Sequelize = Sequelize;

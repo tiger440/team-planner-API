@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
+//CHECK
 router.post("/sendmail",(req,res) => {
 
     const nodemailer = require("nodemailer");

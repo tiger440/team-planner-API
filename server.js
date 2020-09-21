@@ -14,6 +14,7 @@ app.use(BodyParser.urlencoded({extended: false}));
 
 app.use("/user",require('./router/user'));
 app.use("/task",require('./router/task'));
+app.use("/team",require('./router/team'));
 app.use("/", require("./router/nodemailer"));
 
 
