@@ -1,5 +1,4 @@
 const express = require('express');
-const { team } = require('../database/db');
 const db = require('../database/db');
 const router = express.Router();
 
