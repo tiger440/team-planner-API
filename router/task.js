@@ -137,13 +137,32 @@ router.post("/addTaskUser", (req, res) => {
 //CHECK
 router.get("/findUserTasks", (req, res) => {
     db.user.findOne({
-        where: {id: req.body.id},
+        where: { id: req.body.userId },
         include: [
-            {model: db.task}
-        ]
+            {
+                model: db.task,
+                attributes: {
+                    include: [],
+                    exclude: [
+                        "id",
+                        "createdAt",
+                        "updatedAt",
+                    ]
+                },
+                through: {
+                    attributes: []
+                }
+            },
+        ],
     })
-    .then(task => {
-        res.json(task)
+    .then(tasks => {
+        res.json({
+            tasks: {
+                task_name: task_name,
+                start: start.getUTCDate(),
+                end: end.getUTCDate(),
+            }
+        })
     })
     .catch(err =>{
         res.json("error" + err)
