@@ -6,32 +6,66 @@ const Op = Sequelize.Op;
 
 //CHECK
 router.post("/create", (req, res) => {
-    db.task.findOne({ 
-        where: {
-            task_name: {
-                [Op.like]: req.body.task_name
-            },
-            start: {
-                [Op.like]: req.body.start
-            },
-            end: {
-                [Op.like]: req.body.end
-            }
-        }
-    })
-    .then(task => {
-    if (!task){
-        const debut = Date.parse(req.body.start);
-        const fin = Date.parse(req.body.end);
-        if(fin - debut > 0) {
-            db.task.create(req.body)
-            res.json("task successfully created")
-        } else {
-            res.json("date incohérente")
-        } 
-    } else {
-        res.json("cette tâche existe déjà")
+    const taskinfo = {
+        task_name: req.body.task_name,
+        start: req.body.start,
+        end: req.body.end,
+        description: req.body.description,
+        lieu: req.body.lieu,
+        status: true,
     }
+    const userId = req.body.userId
+    db.user.findOne({
+        where: { id: userId }
+    })
+    .then(user => {
+        if (user) {
+            db.task.findOne({
+                where: {
+                    [Op.and]: {
+                        task_name: {
+                            [Op.like]: taskinfo.task_name
+                        },
+                        start: {
+                            [Op.like]: taskinfo.start
+                        },
+                        end: {
+                            [Op.like]: taskinfo.end
+                        }
+                    }
+                }
+            })
+            .then((task) => {
+                if (!task){
+                    const debut = Date.parse(taskinfo.start);
+                    const fin = Date.parse(taskinfo.end);
+                    if(fin - debut > 0) {
+                        db.task.create(taskinfo)
+                        .then((task) => {
+                            if (task) {
+                                user.addTask([task.id], { through: { status: true }})
+                                res.json("task successfully created")
+                            } else {
+                                res.json("cannot link the task")
+                            }
+                        })
+                        .catch((err) => {
+                            res.json(err);
+                        });
+                        
+                    } else {
+                        res.json("date incohérente")
+                    } 
+                } else {
+                    res.json("cette tâche existe déjà")
+                }
+            })
+            .catch((err) => {
+                res.json(err)
+            })
+        } else {
+            res.json("can't find this user")
+        }
     })
     .catch(err => {
         res.json("error" + err)
@@ -91,8 +125,7 @@ router.post("/addTaskUser", (req, res) => {
             .then(rep => {
                 res.json(rep)
               })
-            }
-            else{
+            } else {
                 res.json("not found")
             }
         })

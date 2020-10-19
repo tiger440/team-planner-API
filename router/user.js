@@ -136,11 +136,11 @@ router.get("/login",(req,res) => {
             })
             res.status(200).json({token: token})
             } else {
-                res.json("error mail or password")
+                res.json("wrong email or password")
             }
         } else {
             res.json({ message: "vous devez valider votre mail"})
-        } 
+        }
     })
     .catch(err => {
         res.json(err)

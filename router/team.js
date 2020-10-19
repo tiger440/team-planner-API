@@ -2,31 +2,49 @@ const express = require('express');
 const db = require('../database/db');
 const router = express.Router();
 
-//CHECK - Essayer de créer team uniquement si !team associé au user
-router.post('/newTeam/:id', (req, res) => {
+//CHECK
+router.post('/newTeam', (req, res) => {
+    const teamname = {
+       team_name: req.body.team_name
+    }
     db.user.findOne({
-        where: { id: req.params.id }
+        where: { id: req.body.userId },
+        include: [
+            { model: db.team }
+        ]
     })
-    .then(user => {
-            if(user) {   
-                db.team.create(req.body)
-                .then(team => {
-                    if(team){
-                    user.addTeam([team.id], { through:{ chef: true }})
-                    res.json("team linked successfully")
-                    } else {
-                        res.json("team already exist")
-                    }
-                })
-                .catch(err => {
-                    res.json("error:" + err)
-                })
-            } else {
-                res.json("this team already exist")
-            }
+    .then((user) => {
+        if (user) {
+            db.team.findOne({
+                where: { team_name: teamname.team_name}
+            })
+            .then((team) => {
+                if (!team) {
+                    db.team.create(teamname)
+                    .then((team) => {
+                        if (team) {
+                            user.addTeam([team.id], { through:{ chef: true }})
+                            res.status(200).json("task linked succesfully")
+                        } else {
+                            res.json("the team hasn't been created")
+                        }
+                    })
+                    .catch((err) => {
+                        res.json(err)
+                    })
+                } else {
+                    res.json("this team already exist")
+                }
+            })
+            .catch((err) => {
+                res.json(err)
+            })
+        } else {
+            res.json("can't find this user")
+        }
     })
-    .catch(err => {
-        res.json("cannot find user, error:" + err)
+    .catch((err) => {
+        res.json(err)
     })
 });
 
@@ -82,8 +100,8 @@ router.get("/userTeam", (req, res) => {
             {model: db.team}
         ]
     })
-    .then(team => {
-            res.json(team) 
+    .then(user => {
+            res.json(user)
     })
     .catch(err =>{
         res.json("error" + err)

@@ -1,11 +1,12 @@
+const dotenv = require("dotenv");
 const Express = require("express");
 const BodyParser = require("body-parser");
 const Cors = require("cors");
 
-const port = 3000;
-const hostname = 'localhost';
-
+const port = process.env.PORT || 3000;
 const app = Express();
+
+dotenv.config();
 
 app.use(Cors());
 
@@ -19,5 +20,5 @@ app.use("/", require("./router/nodemailer"));
 
 
 app.listen(port, function () {
-    console.log(`App listening on ${hostname}:${port}`);
+    console.log(`App listening on ${process.env.DB_HOST}:${port}`);
 });

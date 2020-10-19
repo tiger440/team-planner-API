@@ -10,8 +10,8 @@ router.post("/sendmail",(req,res) => {
     var transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-            user: "azerty789258@gmail.com",
-            pass: "kRXEf674SMpEq3E",
+            user: process.env.USER_EMAIL,
+            pass: process.env.USER_PASSWORD,
         }
     });
 
