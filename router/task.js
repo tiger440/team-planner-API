@@ -7,11 +7,14 @@ const Op = Sequelize.Op;
 //CHECK
 router.post("/create", (req, res) => {
     const taskinfo = {
-        task_name: req.body.task_name,
-        start: req.body.start,
-        end: req.body.end,
-        description: req.body.description,
-        lieu: req.body.lieu,
+        Subject: req.body.Subject,
+        StartTime: new Date(req.body.StartTime),
+        EndTime: new Date(req.body.EndTime),
+        StartTimeZone: req.body.StartTimeZone,
+        EndTimeZone: req.body.EndTimeZone,
+        Description: req.body.Description,
+        location: req.body.Location,
+        isAllDay: req.body.isAllDay,
         status: true,
     }
     const userId = req.body.userId
@@ -23,28 +26,28 @@ router.post("/create", (req, res) => {
             db.task.findOne({
                 where: {
                     [Op.and]: {
-                        task_name: {
-                            [Op.like]: taskinfo.task_name
+                        Subject: {
+                            [Op.like]: taskinfo.Subject
                         },
-                        start: {
-                            [Op.like]: taskinfo.start
+                        StartTime: {
+                            [Op.like]: taskinfo.StartTime
                         },
-                        end: {
-                            [Op.like]: taskinfo.end
+                        EndTime: {
+                            [Op.like]: taskinfo.EndTime
                         }
                     }
                 }
             })
             .then((task) => {
                 if (!task){
-                    const debut = Date.parse(taskinfo.start);
-                    const fin = Date.parse(taskinfo.end);
+                    const debut = Date.parse(taskinfo.StartTime);
+                    const fin = Date.parse(taskinfo.EndTime);
                     if(fin - debut > 0) {
                         db.task.create(taskinfo)
                         .then((task) => {
                             if (task) {
-                                user.addTask([task.id], { through: { status: true }})
-                                res.json("task successfully created")
+                                user.addTask([task.Id], { through: { status: true }})
+                                res.json(task)
                             } else {
                                 res.json("cannot link the task")
                             }
@@ -73,7 +76,7 @@ router.post("/create", (req, res) => {
 });
 
 //CHECK
-router.post("/updateTask/:id", (req, res) => {
+router.get("/updateTask/:id", (req, res) => {
     db.task.findOne({
         where: { id: req.params.id }
     })
@@ -130,24 +133,20 @@ router.post("/addTaskUser", (req, res) => {
             }
         })
         .catch(err => {
-            res.send('error' + err)
+            res.sendTime('error' + err)
         }) 
 });
 
 //CHECK
-router.get("/findUserTasks", (req, res) => {
+router.get("/findUserTasks/:id", (req, res) => {
     db.user.findOne({
-        where: { id: req.body.userId },
+        where: { id: req.params.id },
         include: [
             {
                 model: db.task,
                 attributes: {
                     include: [],
-                    exclude: [
-                        "id",
-                        "createdAt",
-                        "updatedAt",
-                    ]
+                    exclude: ["createdAt", "updatedAt"]
                 },
                 through: {
                     attributes: []
@@ -155,14 +154,8 @@ router.get("/findUserTasks", (req, res) => {
             },
         ],
     })
-    .then(tasks => {
-        res.json({
-            tasks: {
-                task_name: task_name,
-                start: start.getUTCDate(),
-                end: end.getUTCDate(),
-            }
-        })
+    .then(user => {
+        res.json(user.tasks)
     })
     .catch(err =>{
         res.json("error" + err)
@@ -186,7 +179,7 @@ router.post("/removeTaskUser", (req, res) => {
             }
         })
         .catch(err => {
-            res.send('error' + err)
+            res.sendTime('error' + err)
         })
 });
 

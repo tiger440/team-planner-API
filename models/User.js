@@ -23,6 +23,10 @@ module.exports = (dbinfo, Sequelize) => {
                 type: Sequelize.DataTypes.STRING,
                 allowNUll: false
             },
+            poste: {
+                type: Sequelize.DataTypes.STRING(45),
+                allowNUll: true
+            },
             image: {
                 type: Sequelize.DataTypes.STRING(255),
                 allowNull: true

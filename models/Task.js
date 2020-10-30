@@ -1,29 +1,41 @@
 module.exports = (dbinfo, Sequelize) => {
     return dbinfo.define(
         "task", {
-            id: {
+            Id: {
                 type:  Sequelize.DataTypes.INTEGER,
                 primaryKey: true,
                 autoIncrement: true
             },
-            task_name: {
+            Subject: {
                 type: Sequelize.DataTypes.STRING(45),
                 allowNull: false
             },
-            start: {
+            StartTime: {
                 type: Sequelize.DataTypes.DATE,
                 allowNull: false
             },
-            end: {
+            EndTime: {
                 type: Sequelize.DataTypes.DATE,
                 allowNull: false
             },
-            description: {
+            StartTimezone: {
+                type: Sequelize.DataTypes.STRING,
+                allowNull: true
+            },
+            EndTimezone: {
+                type: Sequelize.DataTypes.STRING,
+                allowNull: true
+            },
+            Location: {
+                type: Sequelize.DataTypes.STRING(255),
+                allowNull: true
+            },
+            Description: {
                 type: Sequelize.DataTypes.TEXT,
                 allowNull: true
             },
-            lieu: {
-                type: Sequelize.DataTypes.STRING(255),
+            isAllDay: {
+                type: Sequelize.DataTypes.BOOLEAN,
                 allowNull: true
             },
         }, {
