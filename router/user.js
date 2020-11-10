@@ -118,7 +118,7 @@ router.delete("/delete/:id", (req, res) => {
 });
 
 //CHECK
-router.get("/login",(req,res) => {
+router.post("/login",(req,res) => {
     db.user.findOne({
         where: { email: req.body.email }
     })
