@@ -36,7 +36,6 @@ db.linktask = require("../models/Linktask")(dbinfo, Sequelize);
 db.linkteam = require("../models/Linkteam")(dbinfo, Sequelize);
 db.assigner = require("../models/Assigner")(dbinfo, Sequelize);
 db.souscrire = require("../models/Souscrire")(dbinfo, Sequelize);
-db.image = require("../models/Image")(dbinfo, Sequelize);
 
 db.user.belongsToMany(db.task, { through: 'linktask', foreignKey: 'userId' });
 db.task.belongsToMany(db.user, { through: 'linktask', foreignKey: 'TaskId' });
