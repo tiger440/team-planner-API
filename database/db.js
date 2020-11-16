@@ -8,16 +8,15 @@ const db = {};
 const dbinfo = new Sequelize(
     process.env.DB_NAME,
     process.env.DB_USERNAME,
-    process.env.DB_PASSWORD,
-    {
-    host: process.env.DB_HOST,
-    dialect: "mysql",
-    port: 3306,
-    pool: {
-        max: 5,
-        min: 0
-    }
-});
+    process.env.DB_PASSWORD, {
+        host: process.env.DB_HOST,
+        dialect: "mysql",
+        port: 3306,
+        pool: {
+            max: 5,
+            min: 0
+        }
+    });
 
 dbinfo.authenticate()
     .then(() => {
@@ -43,10 +42,16 @@ db.task.belongsToMany(db.user, { through: 'linktask', foreignKey: 'TaskId' });
 db.user.belongsToMany(db.team, { through: 'linkteam', foreignKey: 'userId' });
 db.team.belongsToMany(db.user, { through: 'linkteam', foreignKey: 'teamId' });
 
+db.user.belongsToMany(db.subscription, { through: 'souscrire', foreignKey: 'userId' });
+db.subscription.belongsToMany(db.user, { through: 'souscrire', foreignKey: 'subscriptionId' });
+
+db.user.belongsToMany(db.role, { through: 'assigner', foreignKey: 'userId' });
+db.role.belongsToMany(db.user, { through: 'assigner', foreignKey: 'roleId' });
+
 db.dbinfo = dbinfo;
 db.Sequelize = Sequelize;
 
-//dbinfo.sync({force: true});
+dbinfo.sync({ force: true });
 
 //dbinfo.sync();
 
