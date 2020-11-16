@@ -13,6 +13,11 @@ app.use(Cors());
 app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({ extended: false }));
 
+https.createServer({
+    key: fs.readFileSync('/etc/letsencrypt/live/teamplanner.fr/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/teamplanner.fr/fullchain.pem'),
+}, app).listen(port);
+
 app.use("/user", require('./router/user'));
 app.use("/task", require('./router/task'));
 app.use("/team", require('./router/team'));
