@@ -1,6 +1,6 @@
 module.exports = (dbinfo, Sequelize) => {
     return dbinfo.define(
-        "user", {
+        "admin", {
             id: {
                 type: Sequelize.DataTypes.INTEGER,
                 primaryKey: true,
@@ -8,14 +8,14 @@ module.exports = (dbinfo, Sequelize) => {
             },
             nom: {
                 type: Sequelize.DataTypes.STRING(45),
-                allowNull: false
+                allowNull: true
             },
             prenom: {
                 type: Sequelize.DataTypes.STRING(45),
-                allowNull: false
+                allowNull: true
             },
             email: {
-                type: Sequelize.DataTypes.STRING(150),
+                type: Sequelize.DataTypes.STRING(255),
                 allowNull: false,
                 unique: true,
             },
@@ -23,23 +23,12 @@ module.exports = (dbinfo, Sequelize) => {
                 type: Sequelize.DataTypes.STRING,
                 allowNull: false
             },
-            poste: {
-                type: Sequelize.DataTypes.STRING(45),
-                allowNull: true
-            },
             role: {
-                type: Sequelize.DataTypes.STRING(45),
+                type: Sequelize.DataTypes.TEXT,
                 allowNull: true
             },
-            image: {
-                type: Sequelize.DataTypes.STRING(255),
-                allowNull: true
-            },
-            status: {
-                type: Sequelize.DataTypes.BOOLEAN,
-            }
         }, {
-            timestamps: true,
+            timestamps: false,
             underscored: true
         }
     );

@@ -27,13 +27,12 @@ dbinfo.authenticate()
     });
 
 db.user = require("../models/User")(dbinfo, Sequelize);
+db.admin = require("../models/Admin")(dbinfo, Sequelize);
 db.task = require("../models/Task")(dbinfo, Sequelize);
 db.team = require("../models/Team")(dbinfo, Sequelize);
-db.role = require("../models/Role")(dbinfo, Sequelize);
 db.subscription = require("../models/Subscription")(dbinfo, Sequelize);
 db.linktask = require("../models/Linktask")(dbinfo, Sequelize);
 db.linkteam = require("../models/Linkteam")(dbinfo, Sequelize);
-db.assigner = require("../models/Assigner")(dbinfo, Sequelize);
 db.souscrire = require("../models/Souscrire")(dbinfo, Sequelize);
 
 db.user.belongsToMany(db.task, { through: 'linktask', foreignKey: 'userId' });
@@ -45,13 +44,10 @@ db.team.belongsToMany(db.user, { through: 'linkteam', foreignKey: 'teamId' });
 db.user.belongsToMany(db.subscription, { through: 'souscrire', foreignKey: 'userId' });
 db.subscription.belongsToMany(db.user, { through: 'souscrire', foreignKey: 'subscriptionId' });
 
-db.user.belongsToMany(db.role, { through: 'assigner', foreignKey: 'userId' });
-db.role.belongsToMany(db.user, { through: 'assigner', foreignKey: 'roleId' });
-
 db.dbinfo = dbinfo;
 db.Sequelize = Sequelize;
 
-dbinfo.sync({ force: true });
+//dbinfo.sync({ force: true });
 
 //dbinfo.sync();
 
