@@ -8,16 +8,15 @@ const db = {};
 const dbinfo = new Sequelize(
     process.env.DB_NAME,
     process.env.DB_USERNAME,
-    process.env.DB_PASSWORD,
-    {
-    host: process.env.DB_HOST,
-    dialect: "mysql",
-    port: 3306,
-    pool: {
-        max: 5,
-        min: 0
-    }
-});
+    process.env.DB_PASSWORD, {
+        host: process.env.DB_HOST,
+        dialect: "mysql",
+        port: 3306,
+        pool: {
+            max: 5,
+            min: 0
+        }
+    });
 
 dbinfo.authenticate()
     .then(() => {
@@ -36,6 +35,7 @@ db.linktask = require("../models/Linktask")(dbinfo, Sequelize);
 db.linkteam = require("../models/Linkteam")(dbinfo, Sequelize);
 db.assigner = require("../models/Assigner")(dbinfo, Sequelize);
 db.souscrire = require("../models/Souscrire")(dbinfo, Sequelize);
+db.admin = require("../models/Admin")(dbinfo, Sequelize);
 
 db.user.belongsToMany(db.task, { through: 'linktask', foreignKey: 'userId' });
 db.task.belongsToMany(db.user, { through: 'linktask', foreignKey: 'TaskId' });
