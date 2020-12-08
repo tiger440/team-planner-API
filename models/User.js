@@ -2,7 +2,7 @@ module.exports = (dbinfo, Sequelize) => {
     return dbinfo.define(
         "user", {
             id: {
-                type:  Sequelize.DataTypes.INTEGER,
+                type: Sequelize.DataTypes.INTEGER,
                 primaryKey: true,
                 autoIncrement: true
             },
@@ -21,17 +21,21 @@ module.exports = (dbinfo, Sequelize) => {
             },
             password: {
                 type: Sequelize.DataTypes.STRING,
-                allowNUll: false
+                allowNull: false
             },
             poste: {
                 type: Sequelize.DataTypes.STRING(45),
-                allowNUll: true
+                allowNull: true
+            },
+            role: {
+                type: Sequelize.DataTypes.STRING(45),
+                allowNull: true
             },
             image: {
                 type: Sequelize.DataTypes.STRING(255),
                 allowNull: true
             },
-            Status: {
+            status: {
                 type: Sequelize.DataTypes.BOOLEAN,
             }
         }, {

@@ -2,16 +2,22 @@ const express = require("express");
 const router = express.Router();
 
 //CHECK
-router.post("/sendmail",(req,res) => {
+router.post("/sendmail", (req, res) => {
 
     const nodemailer = require("nodemailer");
 
 
     var transporter = nodemailer.createTransport({
-        service: "gmail",
+        host: 'mail.teamplanner.fr',
+        port: 587,
+        secure: false,
         auth: {
-            user: process.env.USER_EMAIL,
-            pass: process.env.USER_PASSWORD,
+            user: process.env.CONTACT_EMAIL,
+            pass: process.env.CONTACT_PASSWORD,
+        },
+        tls: {
+            //do not fail on invalid certs
+            rejectUnauthorized: false
         }
     });
 
@@ -22,8 +28,8 @@ router.post("/sendmail",(req,res) => {
         text: req.body.text
     }
 
-    transporter.sendMail(mailOptions,(error, info) => {
-        if(error){
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
             res.json(error);
             console.log(error);
         } else {

@@ -15,12 +15,17 @@ module.exports = (dbinfo, Sequelize) => {
                 allowNull: true
             },
             email: {
+<<<<<<< HEAD
                 type: Sequelize.DataTypes.STRING(150),
+=======
+                type: Sequelize.DataTypes.STRING(255),
+>>>>>>> master
                 allowNull: false,
                 unique: true,
             },
             password: {
                 type: Sequelize.DataTypes.STRING,
+<<<<<<< HEAD
                 allowNUll: false
             },
             role: {
@@ -29,6 +34,16 @@ module.exports = (dbinfo, Sequelize) => {
             }
         }, {
             timestamps: true,
+=======
+                allowNull: false
+            },
+            role: {
+                type: Sequelize.DataTypes.TEXT,
+                allowNull: true
+            },
+        }, {
+            timestamps: false,
+>>>>>>> master
             underscored: true
         }
     );

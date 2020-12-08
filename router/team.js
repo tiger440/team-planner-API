@@ -51,13 +51,21 @@ router.post('/newTeam', (req, res) => {
 //CHECK
 router.post("/addTeamUser", (req, res) => {
     db.user.findOne({
+<<<<<<< HEAD
             where: { email: req.body.email }
+=======
+            where: { id: req.body.userId }
+>>>>>>> master
         })
         .then(user => {
             if (user) {
                 user.addTeam([req.body.teamId], { through: { chef: false } })
                     .then(rep => {
+<<<<<<< HEAD
                         res.json(rep)
+=======
+                        res.json("user added to team" + rep)
+>>>>>>> master
                     })
                     .catch(err => {
                         res.json("error" + err)
@@ -80,7 +88,11 @@ router.post("/removeTeamUser", (req, res) => {
             if (user) {
                 user.removeTeam([req.body.teamId], { through: { chef: 0 } })
                     .then(rep => {
+<<<<<<< HEAD
                         res.json("L'utilisateur a bien été retirer de l'équipe")
+=======
+                        res.json(rep)
+>>>>>>> master
                     })
             } else {
                 res.json("not found")
@@ -126,6 +138,11 @@ router.get("/displayTeam/:id", (req, res) => {
             res.json("error" + err)
         })
 });
+
+//reponse all team user id
+router.post("/teamId", (req, res) => {
+    db.find
+})
 
 //CHECK
 router.delete("/deleteTeam/:id", (req, res) => {
