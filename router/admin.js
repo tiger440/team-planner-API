@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-const express = require("express");
-const router = express.Router();
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const db = require("../database/db");
-
-process.env.SECRET_KEY = "secret";
-
-//CHECK
-router.post("/register", (req, res) => {
-    if ((req.body.role != "admin") || (req.body.role = "")) {
-=======
 var express = require("express");
 var router = express.Router();
 var bcrypt = require("bcrypt");
@@ -21,7 +8,6 @@ process.env.SECRET_KEY = 'secret';
 
 router.post("/register", (req, res) => {
     if (req.body.role != "admin") {
->>>>>>> master
         role = "user"
     } else {
         role = "admin"
@@ -33,24 +19,13 @@ router.post("/register", (req, res) => {
             if (!admin) {
                 password = bcrypt.hashSync(req.body.password, 10);
                 db.admin.create({
-<<<<<<< HEAD
-=======
                         nom: req.body.nom,
                         prenom: req.body.prenom,
->>>>>>> master
                         email: req.body.email,
                         password: password,
                         role: role,
                     })
                     .then(adminitem => {
-<<<<<<< HEAD
-                        var data = {
-                            id: adminitem.id,
-                            role: adminitem.role
-
-                        }
-                        let token = jwt.sign(data,
-=======
                         var admindata = {
                             id: adminitem.id,
                             role: adminitem.role,
@@ -58,7 +33,6 @@ router.post("/register", (req, res) => {
                             prenom: adminitem.prenom
                         }
                         let token = jwt.sign(admindata,
->>>>>>> master
                             process.env.SECRET_KEY, {
                                 expiresIn: 1440
                             });
@@ -66,13 +40,9 @@ router.post("/register", (req, res) => {
                         res.status(200).json({ token: token })
                     })
                     .catch(err => {
-<<<<<<< HEAD
                         res.status(401).json({
                             err
                         })
-=======
-                        res.send({ err })
->>>>>>> master
                     })
             } else {
                 res.json("admin déja dans la base");
@@ -83,10 +53,7 @@ router.post("/register", (req, res) => {
         })
 });
 
-<<<<<<< HEAD
 //CHECK
-=======
->>>>>>> master
 router.get("/profile/:id", (req, res) => {
     db.admin.findOne({
             where: { id: req.params.id }
@@ -99,11 +66,7 @@ router.get("/profile/:id", (req, res) => {
                     });
                 res.status(200).json({ token: token })
             } else {
-<<<<<<< HEAD
-                res.json("error cet utilisateur n'existe pas")
-=======
                 res.json("error le admin n'a pas dans la base !!")
->>>>>>> master
             }
         })
         .catch(err => {
@@ -111,7 +74,6 @@ router.get("/profile/:id", (req, res) => {
         })
 });
 
-<<<<<<< HEAD
 //CHECK
 router.put("/update/:id", (req, res) => {
     db.admin.findOne({
@@ -175,8 +137,6 @@ router.delete("/delete/:id", (req, res) => {
 });
 
 //CHECK
-=======
->>>>>>> master
 router.post("/login", (req, res) => {
     console.log(req.body);
     db.admin.findOne({
@@ -197,21 +157,13 @@ router.post("/login", (req, res) => {
                         });
                     res.status(200).json({ auth: true, token: token })
                 } else {
-<<<<<<< HEAD
-                    res.json({
-=======
                     res.status(520).json({
->>>>>>> master
                         auth: false,
                         message: "error email or password"
                     })
                 }
             } else {
-<<<<<<< HEAD
                 return res.status(404).json('admin not found')
-=======
-                return res.status(520).json('admin not found')
->>>>>>> master
             }
         })
         .catch(err => {
@@ -219,49 +171,4 @@ router.post("/login", (req, res) => {
         })
 });
 
-<<<<<<< HEAD
-=======
-
-router.put("/update/:id", (req, res) => {
-    db.admin.findOne({
-            where: { id: req.params.id }
-        })
-        .then(admin => {
-            if (admin) {
-                password = bcrypt.hashSync(req.body.password, 10);
-                req.body.password = password;
-                admin.update(req.body)
-                    .then(adminitem => {
-                        console.log(adminitem);
-                        db.admin.findOne({
-                                where: { id: adminitem.id }
-                            })
-                            .then(admin => {
-                                let token = jwt.sign(admin.dataValues,
-                                    process.env.SECRET_KEY, {
-                                        expiresIn: 1440 //s
-                                    });
-                                res.status(200).json({ token: token })
-                            })
-                            .catch(err => {
-                                res.status(402).send(err + 'bad request')
-                            })
-                    })
-                    .catch(err => {
-                        res.status(402).send("impossible de metter a jour le admin" + err);
-                    })
-            } else {
-                res.json("admin n'est pas dans la base ")
-            }
-        })
-        .catch(err => {
-            res.json(err);
-        })
-})
-
-
-
-
-
->>>>>>> master
 module.exports = router;
