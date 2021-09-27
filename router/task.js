@@ -160,6 +160,34 @@ router.get("/findUserTasks/:id", (req, res) => {
         })
 });
 
+router.get("/findTeamTasks/:id", (req, res) => {
+    db.team.findOne({
+            where: { id: req.params.id },
+            include: [{
+                model: db.user,
+                through: {
+                    attributes: []
+                },
+                include: [{
+                    model: db.task,
+                    through: {
+                        attributes: []
+                    }
+                }]
+            }]
+        })
+        .then(team => {
+            if (team) {
+                res.json(team)
+            } else {
+                res.json("cannot find team")
+            }
+        })
+        .catch(err => {
+            res.json("error" + err)
+        })
+});
+
 //CHECK
 router.post("/removeTaskUser", (req, res) => {
     db.user.findOne({
