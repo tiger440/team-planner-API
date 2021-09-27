@@ -11,7 +11,7 @@ const dbinfo = new Sequelize(
     process.env.DB_PASSWORD, {
         host: process.env.DB_HOST,
         dialect: "mysql",
-        port: 3306,
+        port: 3308,
         pool: {
             max: 5,
             min: 0
