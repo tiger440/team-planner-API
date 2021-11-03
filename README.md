@@ -3,7 +3,7 @@
 
 • run "npm install"
 
-• run WampServer and create the MySQL database "db_garage"
+• run WampServer and create the MySQL database "db_teamplanner"
 
 • Go to database/db.js and un-comment line 196: "dbinfo.sync({ force: true });"
 
