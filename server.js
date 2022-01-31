@@ -58,6 +58,7 @@ app.use("/user", require('./router/user'));
 app.use("/admin", require('./router/admin'));
 app.use("/task", require('./router/task'));
 app.use("/team", require('./router/team'));
+app.use("/membership", require('./router/membership'));
 app.use("/", require("./router/nodemailer"));
 
 

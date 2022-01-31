@@ -2,8 +2,8 @@ const express = require('express');
 const db = require('../database/db');
 const router = express.Router();
 
-//CHECK
-router.post('/newTeam', (req, res) => {
+
+router.post('/', (req, res) => {
     const teamname = {
         team_name: req.body.team_name
     }
@@ -24,7 +24,7 @@ router.post('/newTeam', (req, res) => {
                                 .then((team) => {
                                     if (team) {
                                         user.addTeam([team.id], { through: { chef: true } })
-                                        res.status(200).json("task linked succesfully")
+                                        res.status(200).json("team created succesfully")
                                     } else {
                                         res.json("the team hasn't been created")
                                     }
@@ -48,67 +48,7 @@ router.post('/newTeam', (req, res) => {
         })
 });
 
-//CHECK
-router.post("/addTeamUser", (req, res) => {
-    db.user.findOne({
-            where: { email: req.body.email }
-        })
-        .then(user => {
-            if (user) {
-                user.addTeam([req.body.teamId], { through: { chef: false } })
-                    .then(rep => {
-                        res.json("user added to team" + rep)
-                    })
-                    .catch(err => {
-                        res.json("error" + err)
-                    })
-            } else {
-                res.json("not found")
-            }
-        })
-        .catch(err => {
-            res.send('error' + err)
-        })
-});
-
-//CHECK
-router.post("/removeTeamUser", (req, res) => {
-    db.user.findOne({
-            where: { email: req.body.email }
-        })
-        .then(user => {
-            if (user) {
-                user.removeTeam([req.body.teamId], { through: { chef: 0 } })
-                    .then(rep => {
-                        res.json("L'utilisateur a bien été retirer de l'équipe")
-                    })
-            } else {
-                res.json("not found")
-            }
-        })
-        .catch(err => {
-            res.send('error' + err)
-        })
-});
-
-//CHECK
-router.get("/userTeam", (req, res) => {
-    db.user.findOne({
-            where: { id: req.body.id },
-            include: [
-                { model: db.team }
-            ]
-        })
-        .then(user => {
-            res.json(user)
-        })
-        .catch(err => {
-            res.json("error" + err)
-        })
-});
-
-//CHECK
-router.get("/displayTeam/:id", (req, res) => {
+router.get("/:id", (req, res) => {
     db.team.findOne({
             where: { id: req.params.id },
             include: [{
@@ -130,8 +70,7 @@ router.get("/displayTeam/:id", (req, res) => {
         })
 });
 
-//CHECK
-router.delete("/deleteTeam/:id", (req, res) => {
+router.delete("/:id", (req, res) => {
     db.team.findOne({
             where: { id: req.params.id }
         })
@@ -154,5 +93,6 @@ router.delete("/deleteTeam/:id", (req, res) => {
             res.json("error" + err)
         })
 });
+
 
 module.exports = router;

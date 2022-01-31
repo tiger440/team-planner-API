@@ -53,7 +53,6 @@ router.post("/register", (req, res) => {
         })
 });
 
-//CHECK
 router.get("/profile/:id", (req, res) => {
     db.admin.findOne({
             where: { id: req.params.id }
@@ -74,7 +73,6 @@ router.get("/profile/:id", (req, res) => {
         })
 });
 
-//CHECK
 router.put("/update/:id", (req, res) => {
     db.admin.findOne({
             where: { id: req.params.id }
@@ -111,7 +109,6 @@ router.put("/update/:id", (req, res) => {
         })
 });
 
-//CHECK
 router.delete("/delete/:id", (req, res) => {
     db.admin.findOne({
             where: { id: req.params.id }
@@ -136,7 +133,6 @@ router.delete("/delete/:id", (req, res) => {
         })
 });
 
-//CHECK
 router.post("/login", (req, res) => {
     console.log(req.body);
     db.admin.findOne({

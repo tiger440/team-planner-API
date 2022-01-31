@@ -4,7 +4,7 @@ const router = express.Router();
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
-//CHECK
+
 router.post("/create", (req, res) => {
     const taskinfo = {
         Subject: req.body.Subject,
@@ -75,7 +75,6 @@ router.post("/create", (req, res) => {
         })
 });
 
-//CHECK
 router.get("/updateTask/:id", (req, res) => {
     db.task.findOne({
             where: { id: req.params.id }
@@ -92,7 +91,6 @@ router.get("/updateTask/:id", (req, res) => {
         });
 });
 
-//CHECK
 router.delete("/deleteTask/:id", (req, res) => {
     db.task.findOne({
             where: { id: req.params.id }
@@ -117,7 +115,7 @@ router.delete("/deleteTask/:id", (req, res) => {
         })
 });
 
-//CHECK - AJOUTER FOR POUR QUE PLUSIEURS EMAIL SOIT PRIS EN COMPTE DANS UNE REQUEST
+//ADD POSSIBILITIE TO PUT MULTIPLE EMAIL ADRESS IN ONE REQUEST
 router.post("/addTaskUser", (req, res) => {
     db.user.findOne({
             where: { email: req.body.email }
@@ -137,7 +135,6 @@ router.post("/addTaskUser", (req, res) => {
         })
 });
 
-//CHECK
 router.get("/findUserTasks/:id", (req, res) => {
     db.user.findOne({
             where: { id: req.params.id },
@@ -188,7 +185,6 @@ router.get("/findTeamTasks/:id", (req, res) => {
         })
 });
 
-//CHECK
 router.post("/removeTaskUser", (req, res) => {
     db.user.findOne({
             where: { email: req.body.email }
